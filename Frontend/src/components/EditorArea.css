@@ -4,7 +4,7 @@
   color: #fff;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 40px);
+ 
 }
 .editor-tab {
   background: #2d2d2d;
