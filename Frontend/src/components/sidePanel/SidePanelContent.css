@@ -1,0 +1,29 @@
+.sidepanel-content {
+  height: 100vh;
+  min-width: 200px;
+  background: rgb(37,37,38);
+  color: rgb(171, 171, 172);
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.sidepanel-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgb(37,37,38);
+  user-select: none;
+  font-weight: 300;
+  color: rgb(171, 171, 171);
+  padding: 8px 16px;
+  font-size: 12px;
+  line-height: 22px;
+}
+
+.sidepanel-section-content {
+  padding: 0 12px 8px 24px;
+  background: #232323;
+  animation: expandSection 0.2s;
+}

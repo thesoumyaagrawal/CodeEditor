@@ -1,16 +1,17 @@
 .editor-area {
   flex: 1;
-  background: #1e1e1e;
+  background: #303030;
   color: #fff;
   display: flex;
   flex-direction: column;
  
 }
 .editor-tab {
-  background: #2d2d2d;
+  background: #373738;
   padding: 8px 16px;
-  border-bottom: 1px solid #222;
-  font-size: 0.95rem;
+  border-bottom: 1px solid #212121;
+  font-size: 14px;
+  line-height: 22px;
 }
 .editor-textarea {
   flex: 1;
