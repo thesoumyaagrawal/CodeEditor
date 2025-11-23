@@ -37,11 +37,7 @@
 } 
 
 .sidePanel-item:hover {
-  color: #ffffff;
-}
-.sidePanel-item:hover::before,
-.sidePanel-item.active::before {
-  background-color: #fff;
+  border-left: 2px solid #ffffff;
 } 
 /* Active/selected state */
 .sidePanel-item.active {
@@ -50,4 +46,9 @@
 }
 .sidePanel-item.active::before {
   opacity: 1; /* stay visible */
+}
+
+.sidePanel-item.active {
+  background-color: #333842;
+  border-left: 2px solid #ffffff;
 }

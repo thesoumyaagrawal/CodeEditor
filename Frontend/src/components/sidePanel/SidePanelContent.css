@@ -1,29 +1,79 @@
+.sidepanel-wrapper {
+  display: flex;
+  height: 100vh;
+  min-width: 250px;
+}
+
 .sidepanel-content {
   height: 100vh;
-  min-width: 200px;
-  background: rgb(37,37,38);
+  flex: 1;
+  background: rgb(37, 37, 38);
   color: rgb(171, 171, 172);
   font-size: 14px;
   display: flex;
   flex-direction: column;
-  padding: 0;
+  padding: 0 8px;
+  overflow: auto;
 }
 
+
+.sidepanel-resizer {
+  width: 3px;
+  background: rgb(37, 37, 38);
+  cursor: col-resize;
+  position: relative;
+
+}
+
+.sidepanel-resizer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  transition: background 0.08s ease;
+}
+
+.sidepanel-resizer:hover::before,
+.sidepanel-resizer.resizing::before {
+  background: #007acc;
+}
+
+/* Little icon to indicate it's adjustable */
+.sidepanel-resizer-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(90deg);
+  font-size: 10px;
+  color: #007acc;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Show icon on hover / drag */
+.sidepanel-resizer:hover .sidepanel-resizer-icon,
+.sidepanel-resizer.resizing .sidepanel-resizer-icon {
+  opacity: 1;
+}
+
+/* Existing styles */
 .sidepanel-section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgb(37,37,38);
+  background: rgb(37, 37, 38);
   user-select: none;
   font-weight: 300;
+  min-width: 250px;
   color: rgb(171, 171, 171);
   padding: 8px 16px;
+  border-bottom: 1px solid #212020;
   font-size: 12px;
   line-height: 22px;
 }
 
 .sidepanel-section-content {
-  padding: 0 12px 8px 24px;
-  background: #232323;
+  padding: 8px 16px;
+  background: rgb(37, 37, 38);
   animation: expandSection 0.2s;
 }

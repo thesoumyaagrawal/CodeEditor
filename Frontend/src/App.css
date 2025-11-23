@@ -12,3 +12,8 @@ body, html, #root, .vscode-clone-root {
   justify-content: space-between;
   flex:1;
 }
+
+.editor-area{
+  display: flex;
+  flex-direction: column;
+}
