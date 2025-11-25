@@ -1,97 +1,92 @@
-/* Whole terminal panel (put this at the bottom of your layout) */
-.terminal-wrapper {
-  width: 100%;
-  min-height: 120px;
-  max-height: 70vh;
-  background: #1e1e1e;
-  border-top: 1px solid #333333;
-  display: flex;
-  flex-direction: column;
-  color: #d4d4d4;
-  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+.terminal-wrapper{
+  --bg:#1e1e1e;
+  --tabs:#252526;
+  --fg:#ccc;
+  --out:#d4d4d4;
+  --accent:#007acc;
+  --border:rgb(70 70 71);
+
+  width:100%;
+  min-height:120px;
+  max-height:70vh;
+  background:var(--bg);
+  border-top:.2px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  font-family:Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-/* Top border that you drag (VS Code style) */
-.terminal-resizer {
-  height: 3px;
-  cursor: row-resize;
-  position: relative;
-  background: transparent;
+/* draggable top border */
+.terminal-resizer{
+  height:3px;
+  cursor:row-resize;
+  background:var(--bg);
+  position:relative;
+  transition:background .08s ease;
 }
+.terminal-resizer:hover,
+.terminal-resizer.resizing{ background:var(--accent); }
 
-.terminal-resizer::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: transparent;
-  transition: background 0.08s ease;
+.terminal-resizer-icon{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:9px;
+  color:var(--accent);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .08s ease;
 }
-
-/* Blue line when hover / resizing */
-.terminal-resizer:hover::before,
-.terminal-resizer.resizing::before {
-  background: #007acc;
-}
-
-/* Small icon in the middle to show it's adjustable */
-.terminal-resizer-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 9px;
-  color: #007acc;
-  opacity: 0;
-  pointer-events: none;
-}
-
 .terminal-resizer:hover .terminal-resizer-icon,
-.terminal-resizer.resizing .terminal-resizer-icon {
-  opacity: 1;
+.terminal-resizer.resizing .terminal-resizer-icon{ opacity:1; }
+
+.terminal-inner{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
 }
 
-/* Inner content (tabs + output) */
-.terminal-inner {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+/* AntD tabs */
+.terminal-tabs .ant-tabs-nav{
+  margin:0;
+  background:var(--tabs);
+}
+/* remove the white divider line under tab bar */
+.terminal-tabs .ant-tabs-nav::before{ border-bottom:0 !important; }
+
+.terminal-tabs .ant-tabs-tab{
+  padding:4px 12px;
+  font-size:12px;
+  color:var(--fg);
+}
+.terminal-tabs .ant-tabs-ink-bar{ background:var(--accent); }
+
+.terminal-tabs .ant-tabs-content-holder{
+  flex:1;
+  background:var(--bg);
+  border-top:0 !important;
 }
 
-/* Ant Design tabs tweaks to look more like VS Code terminal tabs */
-.terminal-tabs .ant-tabs-nav {
-  margin: 0;
-  background: #252526;
-  border-bottom: 1px solid #333333;
+.terminal-output{
+  height:100%;
+  padding:8px 10px;
+  font-size:12px;
+  line-height:1.5;
+  color:var(--out);
+  background:var(--bg);
+  overflow:auto;
+  white-space:pre-wrap;
 }
 
-.terminal-tabs .ant-tabs-tab {
-  padding: 4px 12px;
-  font-size: 12px;
-  color: #cccccc;
+.terminal-tab-icons{
+  display:flex;
+  align-items:center;
+  color:var(--fg);
 }
-
-.terminal-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-  color: #ffffff;
+.terminal-tab-icon{
+  margin-right:4px;
+  cursor:pointer;
 }
-
-.terminal-tabs .ant-tabs-ink-bar {
-  background: #007acc;
-}
-
-.terminal-tabs .ant-tabs-content-holder {
-  flex: 1;
-  background: #1e1e1e;
-}
-
-/* Terminal output area */
-.terminal-output {
-  height: 100%;
-  padding: 8px 10px;
-  font-size: 12px;
-  line-height: 1.5;
-  color: #d4d4d4;
-  background: #1e1e1e;
-  overflow: auto;
-  white-space: pre-wrap;
-}
+.terminal-tab-icon:last-child{ margin-right:0; }

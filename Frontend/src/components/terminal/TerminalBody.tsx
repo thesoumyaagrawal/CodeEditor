@@ -7,20 +7,54 @@ const MIN_HEIGHT = 20;
 const MAX_HEIGHT = 700;
 
 // VS Code–like terminal tabs
-const items: TabsProps["items"] = Array.from({ length: 3 }).map((_, i) => {
-  const id = String(i + 1);
-  return {
-    label: `Terminal ${id}`,
-    key: id,
+const items: TabsProps["items"] = [
+  {
+    label: "Input",
+    key: "input",
     children: (
       <div className="terminal-output">
-        {`Content of terminal ${id}\n$ echo "Hello from terminal ${id}"`}
+        {`Content of terminal input\n$ echo "Hello from input terminal"`}
       </div>
     ),
-  };
-});
+  },
+  {
+    label: "Output",
+    key: "output",
+    children: (
+      <div className="terminal-output">
+        {`Content of terminal output\n$ echo "Hello from output terminal"`}
+      </div>
+    ),
+  },
+  {
+    label: "Debug",
+    key: "debug",
+    children: (
+      <div className="terminal-output">
+        {`Content of terminal debug\n$ echo "Hello from debug terminal"`}
+      </div>
+    ),
+  },
+  {
+    label: "Terminal",
+    key: "terminal",
+    children: (
+      <div className="terminal-output">
+        {`Content of terminal\n$ echo "Hello from terminal"`}
+      </div>
+    ),
+  },
+];
 
-const operations = <Button size="small">+ New</Button>;
+const icons = (
+  <span className="terminal-tab-icons">
+    <span className="terminal-tab-icon">X</span>
+    <span className="terminal-tab-icon">+</span>
+    <span className="terminal-tab-icon">-</span>
+    <span className="terminal-tab-icon">...</span>
+    <span className="terminal-tab-icon">Delete</span>
+  </span>
+);
 
 const TerminalBody: React.FC = () => {
   const [height, setHeight] = useState<number>(260);
@@ -69,7 +103,7 @@ const TerminalBody: React.FC = () => {
       <div className="terminal-inner">
         <Tabs
           className="terminal-tabs"
-          tabBarExtraContent={operations}
+          tabBarExtraContent={icons}
           items={items}
           size="small"
         />

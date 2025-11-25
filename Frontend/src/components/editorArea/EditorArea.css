@@ -1,25 +1,25 @@
 .editor-area {
   flex: 1;
-  background: #303030;
-  color: #fff;
   display: flex;
   flex-direction: column;
- 
-}
-.editor-tab {
-  background: #373738;
-  padding: 8px 16px;
-  border-bottom: 1px solid #212121;
-  font-size: 14px;
-  line-height: 22px;
-}
-.editor-textarea {
-  flex: 1;
+  min-height: 0;   /* crucial so the editor can shrink with terminal */
+  min-width: 0;
   background: #1e1e1e;
-  color: #fff;
-  border: none;
-  resize: none;
-  font-size: 1rem;
-  padding: 16px;
-  outline: none;
+}
+
+.editor-tab {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  background: #252526;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: #ccc;
+  font-size: 12px;
+  flex: 0 0 auto;
+}
+
+.editor-monaco {
+  flex: 1;
+  min-height: 0;   /* also crucial */
 }

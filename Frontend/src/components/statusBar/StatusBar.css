@@ -1,0 +1,74 @@
+.statusbar {
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: #1f1f1f;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+
+  color: #d4d4d4;
+  font-size: 12px;
+  user-select: none;
+}
+
+.sb-left,
+.sb-right {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.sb-item {
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 0 10px;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  outline: none;
+}
+
+.sb-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.sb-item:active {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.sb-primary {
+  background: #007acc;
+  color: #fff;
+  padding: 0 12px;
+}
+
+.sb-primary:hover {
+  background: #1490df;
+}
+
+.sb-compact {
+  padding: 0 8px;
+}
+
+.sb-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.sb-count,
+.sb-text {
+  white-space: nowrap;
+}
+
+/* Optional: hide long text on narrow screens */
+@media (max-width: 700px) {
+  .sb-text {
+    display: none;
+  }
+}
