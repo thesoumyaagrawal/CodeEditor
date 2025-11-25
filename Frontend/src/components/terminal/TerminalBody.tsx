@@ -1,68 +1,84 @@
-import React, { useState } from "react";
-import { Button, Tabs } from "antd";
-import type { TabsProps } from "antd";
+import React, { useMemo, useState } from "react";
+import { Tabs, Dropdown, Button, Tooltip } from "antd";
+import type { TabsProps, MenuProps } from "antd";
+import {
+  PlusOutlined,
+  DownOutlined,
+  MoreOutlined,
+  UpOutlined,
+  CloseOutlined,
+} from "@ant-design/icons";
 import "./TerminalBody.css";
 
 const MIN_HEIGHT = 20;
 const MAX_HEIGHT = 700;
 
-// VS Code–like terminal tabs
-const items: TabsProps["items"] = [
-  {
-    label: "Input",
-    key: "input",
-    children: (
-      <div className="terminal-output">
-        {`Content of terminal input\n$ echo "Hello from input terminal"`}
-      </div>
-    ),
-  },
-  {
-    label: "Output",
-    key: "output",
-    children: (
-      <div className="terminal-output">
-        {`Content of terminal output\n$ echo "Hello from output terminal"`}
-      </div>
-    ),
-  },
-  {
-    label: "Debug",
-    key: "debug",
-    children: (
-      <div className="terminal-output">
-        {`Content of terminal debug\n$ echo "Hello from debug terminal"`}
-      </div>
-    ),
-  },
-  {
-    label: "Terminal",
-    key: "terminal",
-    children: (
-      <div className="terminal-output">
-        {`Content of terminal\n$ echo "Hello from terminal"`}
-      </div>
-    ),
-  },
-];
-
-const icons = (
-  <span className="terminal-tab-icons">
-    <span className="terminal-tab-icon">X</span>
-    <span className="terminal-tab-icon">+</span>
-    <span className="terminal-tab-icon">-</span>
-    <span className="terminal-tab-icon">...</span>
-    <span className="terminal-tab-icon">Delete</span>
-  </span>
-);
+type TerminalTabKey = "problems" | "output" | "debugConsole" | "terminal" | "ports";
+type ProfileKey = "bash" | "zsh" | "jsDebug";
 
 const TerminalBody: React.FC = () => {
   const [height, setHeight] = useState<number>(260);
   const [isResizing, setIsResizing] = useState<boolean>(false);
 
-  const handleMouseDown = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
+  const [activeKey, setActiveKey] = useState<TerminalTabKey>("terminal");
+  const [profile, setProfile] = useState<ProfileKey>("bash");
+
+  const profileMenuItems: MenuProps["items"] = useMemo(
+    () => [
+      { key: "bash", label: "bash" },
+      { key: "zsh", label: "zsh" },
+      { key: "jsDebug", label: "JavaScript Debug Terminal" },
+      {
+        key: "split",
+        label: "Split Terminal",
+        children: [
+          { key: "split-current", label: "Split with current profile" },
+          { key: "split-bash", label: "Split with bash" },
+          { key: "split-zsh", label: "Split with zsh" },
+        ],
+      },
+      { type: "divider" },
+      { key: "settings", label: "Configure Terminal Settings" },
+      { key: "defaultProfile", label: "Select Default Profile" },
+      { type: "divider" },
+      { key: "runTask", label: "Run Task..." },
+      { key: "configureTasks", label: "Configure Tasks..." },
+    ],
+    []
+  );
+
+  const onProfileMenuClick: MenuProps["onClick"] = ({ key }) => {
+    if (key === "bash" || key === "zsh" || key === "jsDebug") setProfile(key);
+    // handle other actions here if needed (settings/run task/splits...)
+  };
+
+  const onNewTerminal = () => {
+    // Your real create-terminal logic goes here
+    // (right now we just keep the UI consistent)
+    // console.log("New terminal with profile:", profile);
+  };
+
+  const tabs: TabsProps["items"] = useMemo(
+    () => [
+      { key: "problems", label: "PROBLEMS", children: <div className="terminal-output">{`No problems have been detected.`}</div> },
+      { key: "output", label: "OUTPUT", children: <div className="terminal-output">{`Output channel…`}</div> },
+      { key: "debugConsole", label: "DEBUG CONSOLE", children: <div className="terminal-output">{`Debug console…`}</div> },
+      {
+        key: "terminal",
+        label: "TERMINAL",
+        children: (
+          <div className="terminal-output">
+            {`6:25:51 PM [vite] (client) hmr update /src/components/editorArea/EditorArea.tsx
+$ `}
+          </div>
+        ),
+      },
+      { key: "ports", label: "PORTS", children: <div className="terminal-output">{`No ports are currently forwarded.`}</div> },
+    ],
+    []
+  );
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsResizing(true);
 
@@ -71,12 +87,9 @@ const TerminalBody: React.FC = () => {
 
     const onMouseMove = (event: MouseEvent) => {
       const delta = event.clientY - startY;
-      // drag up -> bigger, drag down -> smaller
       let newHeight = startHeight - delta;
-
       if (newHeight < MIN_HEIGHT) newHeight = MIN_HEIGHT;
       if (newHeight > MAX_HEIGHT) newHeight = MAX_HEIGHT;
-
       setHeight(newHeight);
     };
 
@@ -90,22 +103,84 @@ const TerminalBody: React.FC = () => {
     document.addEventListener("mouseup", onMouseUp);
   };
 
+  const toolbar = (
+    <div className="terminal-toolbar">
+      {/* + plus + dropdown arrow (like VS Code) */}
+      <div className="terminal-toolbar-group">
+        <Tooltip title="New Terminal">
+          <Button
+            size="small"
+            type="text"
+            className="terminal-icon-btn"
+            icon={<PlusOutlined />}
+            aria-label="New terminal"
+            onClick={onNewTerminal}
+          />
+        </Tooltip>
+
+        <Dropdown
+          placement="bottomRight"
+          trigger={["click"]}
+          menu={{ items: profileMenuItems, onClick: onProfileMenuClick }}
+          overlayClassName="vscode-terminal-dropdown"
+        >
+          <Button
+            size="small"
+            type="text"
+            className="terminal-icon-btn"
+            icon={<DownOutlined />}
+            aria-label="Select terminal profile"
+          />
+        </Dropdown>
+      </div>
+
+      <Tooltip title="More Actions">
+        <Button
+          size="small"
+          type="text"
+          className="terminal-icon-btn"
+          icon={<MoreOutlined />}
+          aria-label="More actions"
+        />
+      </Tooltip>
+
+      <Tooltip title="Maximize Panel">
+        <Button
+          size="small"
+          type="text"
+          className="terminal-icon-btn"
+          icon={<UpOutlined />}
+          aria-label="Maximize panel"
+        />
+      </Tooltip>
+
+      <Tooltip title="Close Panel">
+        <Button
+          size="small"
+          type="text"
+          className="terminal-icon-btn"
+          icon={<CloseOutlined />}
+          aria-label="Close panel"
+        />
+      </Tooltip>
+    </div>
+  );
+
   return (
     <div className="terminal-wrapper" style={{ height }}>
-      {/* draggable top border like VS Code panel */}
       <div
         className={`terminal-resizer ${isResizing ? "resizing" : ""}`}
         onMouseDown={handleMouseDown}
-      >
-        <span className="terminal-resizer-icon">⋮⋮</span>
-      </div>
+      />
 
       <div className="terminal-inner">
         <Tabs
           className="terminal-tabs"
-          tabBarExtraContent={icons}
-          items={items}
+          items={tabs}
+          activeKey={activeKey}
+          onChange={(k) => setActiveKey(k as TerminalTabKey)}
           size="small"
+          tabBarExtraContent={{ right: toolbar }}
         />
       </div>
     </div>

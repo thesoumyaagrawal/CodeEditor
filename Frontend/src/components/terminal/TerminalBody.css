@@ -1,92 +1,129 @@
-.terminal-wrapper{
-  --bg:#1e1e1e;
-  --tabs:#252526;
-  --fg:#ccc;
-  --out:#d4d4d4;
-  --accent:#007acc;
-  --border:rgb(70 70 71);
-
-  width:100%;
-  min-height:120px;
-  max-height:70vh;
-  background:var(--bg);
-  border-top:.2px solid var(--border);
-  display:flex;
-  flex-direction:column;
-  font-family:Menlo, Monaco, Consolas, "Courier New", monospace;
+.terminal-wrapper {
+  width: 100%;
+  background: #1e1e1e;
+  border-top: 1px solid #2d2d2d;
+  overflow: hidden;
+  position: relative;
 }
 
-/* draggable top border */
-.terminal-resizer{
-  height:3px;
-  cursor:row-resize;
-  background:var(--bg);
-  position:relative;
-  transition:background .08s ease;
+.terminal-resizer {
+  height: 3px;
+  cursor: ns-resize;
+  border-bottom: 1px solid #2d2d2d;
+  background: #1e1e1e;
 }
-.terminal-resizer:hover,
-.terminal-resizer.resizing{ background:var(--accent); }
-
-.terminal-resizer-icon{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  font-size:9px;
-  color:var(--accent);
-  opacity:0;
-  pointer-events:none;
-  transition:opacity .08s ease;
+.terminal-resizer:hover{
+  background: #007acc;
+  height: 3px;
 }
-.terminal-resizer:hover .terminal-resizer-icon,
-.terminal-resizer.resizing .terminal-resizer-icon{ opacity:1; }
+.terminal-resizer.resizing {
+  background: #007acc;
+   height: 3px;
 
-.terminal-inner{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
 }
 
-/* AntD tabs */
-.terminal-tabs .ant-tabs-nav{
-  margin:0;
-  background:var(--tabs);
-}
-/* remove the white divider line under tab bar */
-.terminal-tabs .ant-tabs-nav::before{ border-bottom:0 !important; }
-
-.terminal-tabs .ant-tabs-tab{
-  padding:4px 12px;
-  font-size:12px;
-  color:var(--fg);
-}
-.terminal-tabs .ant-tabs-ink-bar{ background:var(--accent); }
-
-.terminal-tabs .ant-tabs-content-holder{
-  flex:1;
-  background:var(--bg);
-  border-top:0 !important;
+.terminal-inner {
+  height: calc(100% - 6px);
+  display: flex;
+  flex-direction: column;
 }
 
-.terminal-output{
-  height:100%;
-  padding:8px 10px;
-  font-size:12px;
-  line-height:1.5;
-  color:var(--out);
-  background:var(--bg);
-  overflow:auto;
-  white-space:pre-wrap;
+/* === Tabs bar (VS Code look) === */
+.terminal-tabs .ant-tabs-nav {
+  margin: 0;
+  padding: 0 10px;
+  background: #252526;
 }
 
-.terminal-tab-icons{
-  display:flex;
-  align-items:center;
-  color:var(--fg);
+.terminal-tabs .ant-tabs-nav::before {
+  border-bottom: 1px solid #2d2d2d !important;
 }
-.terminal-tab-icon{
-  margin-right:4px;
-  cursor:pointer;
+
+.terminal-tabs .ant-tabs-tab {
+  padding: 10px 14px !important;
+  margin: 0 8px 0 0 !important;
+  font-size: 12px !important;
+  line-height: 22px !important;
+  text-transform: uppercase;
+  color: #a9a9a9 !important;
 }
-.terminal-tab-icon:last-child{ margin-right:0; }
+
+.terminal-tabs .ant-tabs-tab-btn {
+  color: inherit !important;
+}
+.terminal-tabs .ant-tabs-tab-active {
+  color: #ffffff !important;
+}
+.terminal-tabs .ant-tabs-ink-bar {
+  background: #ffffff !important;
+  height: 2px !important;
+}
+
+/* remove extra padding around content */
+.terminal-tabs .ant-tabs-content-holder {
+  flex: 1;
+}
+.terminal-tabs .ant-tabs-content {
+  height: 100%;
+}
+.terminal-tabs .ant-tabs-tabpane {
+  height: 100%;
+}
+
+/* === Right toolbar === */
+.terminal-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 4px;
+}
+.terminal-toolbar-group {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid transparent;
+}
+.terminal-icon-btn {
+  color: #c5c5c5 !important;
+  height: 28px !important;
+  width: 32px !important;
+  border-radius: 0 !important;
+}
+.terminal-icon-btn:hover {
+  color: #ffffff !important;
+  background: #2a2d2e !important;
+}
+
+/* === Terminal output area === */
+.terminal-output {
+  height: 100%;
+  padding: 14px 16px;
+  color: #d4d4d4;
+  background: #1e1e1e;
+  white-space: pre;
+  font-size: 12px;
+  line-height: 22px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+  "Courier New", monospace;
+}
+
+/* === Dropdown menu (dark like VS Code) === */
+.vscode-terminal-dropdown .ant-dropdown-menu {
+  background: #252526 !important;
+  border: 1px solid #3c3c3c;
+  padding: 6px;
+  min-width: 260px;
+}
+.vscode-terminal-dropdown .ant-dropdown-menu-item,
+.vscode-terminal-dropdown .ant-dropdown-menu-submenu-title {
+  color: #d4d4d4 !important;
+  border-radius: 6px;
+}
+.vscode-terminal-dropdown .ant-dropdown-menu-item:hover,
+.vscode-terminal-dropdown .ant-dropdown-menu-submenu-title:hover {
+  background: #2a2d2e !important;
+}
+.vscode-terminal-dropdown .ant-dropdown-menu-item-divider {
+  background: #3c3c3c !important;
+}

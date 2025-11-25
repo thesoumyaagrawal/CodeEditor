@@ -1,35 +1,56 @@
-import React, { useMemo, useState } from "react";
-import Editor from "@monaco-editor/react";
+import React, { useRef, useMemo, useState } from "react";
+import { Editor, type OnMount } from "@monaco-editor/react";
+import type * as monaco from "monaco-editor";
+import LanguageSelector from "./LanguageSelector";
+import { LANGUAGES } from "../../constants/languages";
 import "./EditorArea.css";
 
-const EditorArea: React.FC = () => {
-  const [value, setValue] = useState<string>("// some comment");
-  const language = "javascript";
+const getBoilerplate = (key: string) =>
+  LANGUAGES.find((l) => l.key === key)?.boilerplate ?? "";
 
-  // optional: nicer VS Code-ish defaults
-  const options = useMemo(
+const EditorArea: React.FC = () => {
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+
+  const [language, setLanguage] = useState<string>("javascript");
+  const [value, setValue] = useState<string>(getBoilerplate("javascript"));
+
+  const onMount: OnMount = (editor) => {
+    editorRef.current = editor;
+    editor.focus();
+  };
+
+  const options = useMemo<monaco.editor.IStandaloneEditorConstructionOptions>(
     () => ({
       minimap: { enabled: false },
       fontSize: 13,
-      wordWrap: "on" as const,
+      wordWrap: "on",
       smoothScrolling: true,
       scrollBeyondLastLine: false,
-      automaticLayout: true, // important in resizable layouts
+      automaticLayout: true,
     }),
     []
   );
 
+  const onSelect = (langKey: string) => {
+    setLanguage(langKey);
+    setValue(getBoilerplate(langKey)); // ✅ boilerplate switches with language
+  };
+
   return (
     <div className="editor-area">
-      <div className="editor-tab">Untitled-1</div>
+      <div className="editor-tab">
+        <LanguageSelector language={language} onSelect={onSelect} />
+        
+      </div>
 
       <div className="editor-monaco">
         <Editor
           height="100%"
-          defaultLanguage={language}
-          value={value}
-          onChange={(v) => setValue(v ?? "")}
           theme="vs-dark"
+          language={language} // ✅ switches monaco language too
+          value={value}
+          onMount={onMount}
+          onChange={(newValue) => setValue(newValue ?? "")}
           options={options}
         />
       </div>
