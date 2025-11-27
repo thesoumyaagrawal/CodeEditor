@@ -23,6 +23,35 @@ const TerminalBody: React.FC = () => {
   const [activeKey, setActiveKey] = useState<TerminalTabKey>("terminal");
   const [profile, setProfile] = useState<ProfileKey>("bash");
 
+  const [terminalInput, setTerminalInput] = useState('');
+  const [terminalHistory, setTerminalHistory] = useState<string[]>([]);
+
+  const handleTerminalInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTerminalInput(e.target.value);
+  };
+
+  const handleTerminalKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      const command = terminalInput.trim();
+      if (command) {
+        setTerminalHistory((prev) => [...prev, `$ ${command}`]);
+        setTerminalInput('');
+        // Backend call to execute command (pseudo, needs backend API)
+        try {
+          const res = await fetch('/api/terminal', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ command }),
+          });
+          const data = await res.json();
+          setTerminalHistory((prev) => [...prev, data.output]);
+        } catch (err) {
+          setTerminalHistory((prev) => [...prev, '[error] Could not execute command']);
+        }
+      }
+    }
+  };
+
   const profileMenuItems: MenuProps["items"] = useMemo(
     () => [
       { key: "bash", label: "bash" },
@@ -68,14 +97,32 @@ const TerminalBody: React.FC = () => {
         label: "TERMINAL",
         children: (
           <div className="terminal-output">
-            {`6:25:51 PM [vite] (client) hmr update /src/components/editorArea/EditorArea.tsx
-$ `}
+            {terminalHistory.map((line, idx) => (
+              <div key={idx}>{line}</div>
+            ))}
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <span style={{ color: '#6f6f6f', marginRight: 4 }}>$</span>
+              <input
+                className="terminal-input"
+                value={terminalInput}
+                onChange={handleTerminalInput}
+                onKeyDown={handleTerminalKeyDown}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: '#fff',
+                  outline: 'none',
+                  width: '100%',
+                }}
+                autoFocus
+              />
+            </div>
           </div>
         ),
       },
       { key: "ports", label: "PORTS", children: <div className="terminal-output">{`No ports are currently forwarded.`}</div> },
     ],
-    []
+    [terminalHistory, terminalInput]
   );
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
